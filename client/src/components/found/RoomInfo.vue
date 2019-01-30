@@ -25,12 +25,6 @@
       <mt-button class="primary" type="primary" size="large" @click="postRoomInfo">确定创建</mt-button>
       <mt-button class="danger" type="danger" size="large">取消创建</mt-button>
     </div>
-
-    <form action="http://localhost:8080/api/werewolves/postRoomInfo" method="post">
-      <input type="text" name="name" value="fred">
-      <input type="text" name="tel" value="0926xxx572">
-      <input type="submit" value="Submit">
-    </form>
   </div>
 </template>
 
