@@ -70,6 +70,7 @@ export default {
         .post("postRoomInfo", { player_num: this.player_num, rule: this.rule })
         .then(res => {
           console.log(res.body);
+          // TODO: 在vuex中记录房间ID
         });
     }
   }

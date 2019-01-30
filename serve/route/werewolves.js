@@ -5,8 +5,17 @@ var db = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '66812652j',
-  database: 'werewolves'
+  database: 'werewolves',
+  multipleStatements: true
 })
+
+// 打乱数组-洗牌算法
+function FisherYates(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    const random = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[random]] = [arr[random], arr[i]];
+  }
+}
 
 module.exports = function () {
   var router = express.Router();
@@ -44,9 +53,17 @@ module.exports = function () {
         player_actor.push(key);
       }
     }
-    console.log(player_num);
-    console.log(player_actor);
-    res.send('ok');
+    // 随机生成角色顺序
+    FisherYates(player_actor);
+    db.query(`INSERT INTO room (player_num, player_actor) VALUES ("${player_num}","${player_actor}"); SELECT @@IDENTITY AS 'id'`, (err,data) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('database error').end();
+      } else {
+        let roomId = data[1][0].id.toString();
+        res.send(roomId).end();
+      }
+    });
   })
 
   return router;
