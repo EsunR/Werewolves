@@ -23,7 +23,7 @@
     </div>
     <div class="card btn_box">
       <mt-button class="primary" type="primary" size="large" @click="postRoomInfo">确定创建</mt-button>
-      <mt-button class="danger" type="danger" size="large">取消创建</mt-button>
+      <mt-button class="danger" type="danger" size="large" @click="backToHome">取消创建</mt-button>
     </div>
   </div>
 </template>
@@ -69,9 +69,16 @@ export default {
       this.$http
         .post("postRoomInfo", { player_num: this.player_num, rule: this.rule })
         .then(res => {
-          console.log(res.body);
-          // TODO: 在vuex中记录房间ID
+          // console.log(res.body);
+          // 在vuex中记录房间ID
+          this.$store.commit("setRoomId", res.body);
+          this.$store.commit("setPlayerNo", 1);
+          this.$router.push("/found/Ready");
         });
+    },
+    // 返回首页
+    backToHome(){
+      this.$router.push("/home");
     }
   }
 };

@@ -19,6 +19,7 @@ function FisherYates(arr) {
 
 module.exports = function () {
   var router = express.Router();
+  // 获取比赛规则
   router.get('/getRule', (req, res) => {
     let num = req.query.num;
     db.query(`SELECT * FROM rule WHERE player_num = ${num}`, (err, data) => {
@@ -44,6 +45,7 @@ module.exports = function () {
     })
   })
 
+  // 创建房间
   router.post('/postRoomInfo', (req, res) => {
     let player_num = req.body.player_num;
     let rule = req.body.rule;
@@ -55,7 +57,7 @@ module.exports = function () {
     }
     // 随机生成角色顺序
     FisherYates(player_actor);
-    db.query(`INSERT INTO room (player_num, player_actor) VALUES ("${player_num}","${player_actor}"); SELECT @@IDENTITY AS 'id'`, (err,data) => {
+    db.query(`INSERT INTO room (player_num, player_actor) VALUES ("${player_num}","${player_actor}"); SELECT @@IDENTITY AS 'id'`, (err, data) => {
       if (err) {
         console.log(err);
         res.status(500).send('database error').end();
@@ -64,6 +66,30 @@ module.exports = function () {
         res.send(roomId).end();
       }
     });
+  })
+
+  // 加入游戏，获取角色
+  router.get('/getActor', (req, res) => {
+    let roomId = req.query.roomId;
+    console.log('roomId: ', roomId);
+    let playerNo = req.query.playerNo;
+    console.log('playerNo: ', playerNo);
+    db.query(`SELECT player_actor FROM room WHERE id = '${roomId}'`, (err, data) => {
+      if (err) {
+        res.status(500).send(err).end();
+      } else {
+        let actor_arr = data[0].player_actor.split(",");
+        let actor_name = actor_arr[playerNo - 1];
+        db.query(`SELECT * FROM actor WHERE name = '${actor_name}'`, (err, data) => {
+          if (err) {
+            res.status(500).send(err).end();
+          }else{
+            console.log(data[0]);
+            res.send(data[0]).end();
+          }
+        })
+      }
+    })
   })
 
   return router;
