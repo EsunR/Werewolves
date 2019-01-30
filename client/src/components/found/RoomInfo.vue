@@ -97,9 +97,8 @@ export default {
   padding: 20px;
   table {
     width: 100%;
-    padding: 20px;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 10px;
     overflow: hidden;
     th,
     tr,
