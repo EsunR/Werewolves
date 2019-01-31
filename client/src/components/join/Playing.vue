@@ -1,13 +1,14 @@
 <template>
   <div>
     <div class="container" v-show="!flag">
-      <img :src="actor.img" class="actor_img">
-      <div class="card actor">
+      <img :src="actor.img" class="actor_img" v-if="!err">
+      <div class="card err_msg" v-if="err">信息填写错误!</div>
+      <div class="card actor" v-if="!err">
         <div class="name">{{actor.name}}</div>
         <div class="description">{{actor.description}}</div>
       </div>
       <div class="hide_btn card" @click="hide">点击隐藏身份</div>
-      <div class="exit_btn card" @click="exit">退出游戏</div>      
+      <div class="exit_btn card" @click="exit">退出游戏</div>
     </div>
     <div class="hide" v-show="flag">
       <div class="playerNo_box">
@@ -27,7 +28,8 @@ export default {
       roomId: this.$store.state.roomId,
       playerNo: this.$store.state.playerNo,
       actor: {},
-      flag: false //是否开启遮蔽层
+      flag: false, //是否开启遮蔽层
+      err: false, //错误信息
     };
   },
   mounted() {
@@ -40,14 +42,19 @@ export default {
           "getActor" + "?roomId=" + this.roomId + "&playerNo=" + this.playerNo
         )
         .then(res => {
-          this.actor = res.data;
+          if (res.data.err) {
+            console.log(1);
+            this.err = true;
+          } else {
+            this.actor = res.data;
+          }
         });
     },
     hide() {
       this.flag = !this.flag;
     },
-    exit(){
-      this.$router.push('/home')
+    exit() {
+      this.$router.push("/home");
     }
   }
 };
@@ -61,6 +68,13 @@ export default {
   border-radius: 10px;
   margin-top: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.err_msg{
+  font-size: 2rem;
+  text-align: center;
+  line-height: 20rem;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: bold;
 }
 .actor {
   padding: 15px;
@@ -83,7 +97,7 @@ export default {
   font-weight: 100;
   margin-top: 2rem;
 }
-.exit_btn{
+.exit_btn {
   font-size: 2rem;
   text-align: center;
   color: white;
@@ -117,7 +131,7 @@ export default {
       margin-left: -8px;
     }
   }
-  .show_btn{
+  .show_btn {
     width: 100%;
     font-size: 2rem;
     text-align: center;

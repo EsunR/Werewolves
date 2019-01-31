@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const path = require('path')
 const fs = require('fs')
 const https = require('https')
+const static = require('express-static');
+
 
 // 根据项目的路径导入生成的证书文件
 const privateKey = fs.readFileSync(path.join(__dirname, './certificate/private.key'), 'utf8')
@@ -27,7 +29,7 @@ httpsServer.listen(SSLPORT, () => {
 
 //获取请求数据
 server.use(bodyParser.urlencoded());
-server.use(bodyParser.json({limit: '1mb'}));
+server.use(bodyParser.json({ limit: '1mb' }));
 server.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -35,4 +37,9 @@ server.use(bodyParser.urlencoded({
 
 // router
 server.use('/api/werewolves', require('./route/werewolves.js')());
+
+// 访问静态文件
+server.use(static('./static/'));
+
+
 

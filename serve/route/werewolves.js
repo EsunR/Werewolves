@@ -9,6 +9,8 @@ var db = mysql.createPool({
   multipleStatements: true
 })
 
+
+
 // 打乱数组-洗牌算法
 function FisherYates(arr) {
   for (let i = 1; i < arr.length; i++) {
@@ -19,6 +21,12 @@ function FisherYates(arr) {
 
 module.exports = function () {
   var router = express.Router();
+  router.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+    next();
+  });
   // 获取比赛规则
   router.get('/getRule', (req, res) => {
     let num = req.query.num;
@@ -33,7 +41,6 @@ module.exports = function () {
             if (err) {
               console.log(err);
             } else {
-              // console.log(data[0].name);
               rule[data[0].name] = orgin_rule[key];
               if (Object.keys(rule).length == Object.keys(orgin_rule).length) {
                 res.send(rule).end();
@@ -78,16 +85,20 @@ module.exports = function () {
       if (err) {
         res.status(500).send(err).end();
       } else {
-        let actor_arr = data[0].player_actor.split(",");
-        let actor_name = actor_arr[playerNo - 1];
-        db.query(`SELECT * FROM actor WHERE name = '${actor_name}'`, (err, data) => {
-          if (err) {
-            res.status(500).send(err).end();
-          }else{
-            console.log(data[0]);
-            res.send(data[0]).end();
-          }
-        })
+        if (data[0]) {
+          let actor_arr = data[0].player_actor.split(",");
+          let actor_name = actor_arr[playerNo - 1];
+          db.query(`SELECT * FROM actor WHERE name = '${actor_name}'`, (err, data) => {
+            if (err) {
+              res.status(500).send(err).end();
+            } else {
+              res.send(data[0]).end();
+            }
+          })
+        } else {
+          console.log('查询信息不存在');
+          res.send({err: '查询信息不存在'}).end();
+        }
       }
     })
   })
