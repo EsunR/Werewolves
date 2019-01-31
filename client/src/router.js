@@ -5,6 +5,7 @@ import Home from './components/menu/HomeMenu.vue'
 import RoomInfo from './components/found/RoomInfo.vue'
 import Ready from './components/found/Ready.vue'
 import Playing from './components/join/Playing.vue'
+import JoinRoom from './components/join/JoinRoom.vue'
 
 var router = new VueRouter({
   routes: [
@@ -12,7 +13,8 @@ var router = new VueRouter({
     {path: '/home', component: Home},
     {path: '/found/RoomInfo', component: RoomInfo},
     {path: '/found/Ready', component: Ready},
-    {path: '/join/Playing', component: Playing}
+    {path: '/join/Playing', component: Playing},
+    {path: '/join/JoinRoom', component: JoinRoom},
   ]
 })
 

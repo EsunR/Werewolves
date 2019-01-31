@@ -7,6 +7,7 @@
         <div class="description">{{actor.description}}</div>
       </div>
       <div class="hide_btn card" @click="hide">点击隐藏身份</div>
+      <div class="exit_btn card" @click="exit">退出游戏</div>      
     </div>
     <div class="hide" v-show="flag">
       <div class="playerNo_box">
@@ -44,6 +45,9 @@ export default {
     },
     hide() {
       this.flag = !this.flag;
+    },
+    exit(){
+      this.$router.push('/home')
     }
   }
 };
@@ -77,6 +81,16 @@ export default {
   background-color: #263238;
   line-height: 5rem;
   font-weight: 100;
+  margin-top: 2rem;
+}
+.exit_btn{
+  font-size: 2rem;
+  text-align: center;
+  color: white;
+  background-color: #f44336;
+  line-height: 5rem;
+  font-weight: 100;
+  margin-top: 2rem;
 }
 .hide {
   width: 100%;
@@ -105,7 +119,7 @@ export default {
   }
   .show_btn{
     width: 100%;
-    font-size: 3rem;
+    font-size: 2rem;
     text-align: center;
     position: absolute;
     bottom: 0;

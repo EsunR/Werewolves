@@ -2,8 +2,8 @@
   <div class="container">
     <img class="logo" src="../../img/logo.png" alt="">
     <div class="btn_box">
-      <mt-button @click="gotoRoomInfo" class="found_btn" size="large" type="primary">加入游戏</mt-button>
-      <mt-button class="join_btn" size="large" type="danger">创建游戏</mt-button>
+      <mt-button @click="gotoJoinRoom" class="found_btn" size="large" type="primary">加入游戏</mt-button>
+      <mt-button @click="gotoRoomInfo" class="join_btn" size="large" type="danger">创建游戏</mt-button>
     </div>
     <div class="message">
       版本：α内测版
@@ -21,6 +21,9 @@ export default {
   methods: {
     gotoRoomInfo(){
       this.$router.push("/found/RoomInfo")
+    },
+    gotoJoinRoom(){
+      this.$router.push("/join/JoinRoom")
     }
   },
 };
